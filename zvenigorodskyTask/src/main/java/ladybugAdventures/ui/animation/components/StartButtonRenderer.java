@@ -25,7 +25,7 @@ public class StartButtonRenderer extends org.newdawn.slick.gui.AbstractComponent
 	}
 	public StartButtonRenderer(GUIContext container) throws SlickException {
 		super(container);
-		unpressedImage = new Image(ResourceProvider.getResInpStr(ResourceProvider.START_BUTTON_ID),ResourceProvider.START_BUTTON_ID, false);
+		unpressedImage = new Image(ResourceProvider.getResInpStr(ResourceProvider.START_BUTTON),ResourceProvider.START_BUTTON, false);
 //		pressedImage = new Image(ResourceProvider.getResInpStr(ResourceProvider.START_BUTTON_PRESSED_ID),ResourceProvider.START_BUTTON_PRESSED_ID, false);
 		visible = true;
 		drawbleImage = unpressedImage;

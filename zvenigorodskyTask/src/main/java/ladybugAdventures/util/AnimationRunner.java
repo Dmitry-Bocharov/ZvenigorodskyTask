@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -30,6 +31,7 @@ public class AnimationRunner extends StateBasedGame{
 	public static final String GAME_NAME = "Приключения божьей коровки";
 	public static final byte mainview = 1;
 	public static final byte splash = 0;//loading screen
+	Music musik;
 	
 	private ManagementProgram program;
 	private GameField field;
@@ -63,7 +65,7 @@ public class AnimationRunner extends StateBasedGame{
 					AppGameContainer container = new AppGameContainer(new AnimationRunner(GAME_NAME, program, field));
 //					org.eclipse.swt.graphics.Rectangle bounds = Display.getDefault().getBounds();
 //					container.setDisplayMode(bounds.width, bounds.height, false);
-					container.setDisplayMode(1366, 768, false);
+					container.setDisplayMode(1900, 1060, false);
 					container.setShowFPS(false);
 					container.setTitle(GAME_NAME);
 					container.setForceExit(false);

@@ -11,20 +11,15 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
 public class UniversalAnimationRenderer extends AbstractComponent {
-	protected int x,y,wigth,height;
+	protected int x,y,width,height;
 	protected Animation sprite;
 	protected boolean visible;
 	public UniversalAnimationRenderer(GUIContext container, int size) throws SlickException {
 		super(container);
-		wigth = size;
+		width = size;
 		height = size;
 		x = 0;
 		y = 0;
-//		SpriteSheet sheet = new SpriteSheet(
-//				new Image(ResourceProvider.getResInpStr(resourceProviderID),
-//						resourceProviderID,false), tilesWidth, tilesHeight);
-//		sprite = new Animation(sheet, duration);
-//		sprite.setLooping(true);
 		visible = false;
 	}
 	public void setFrameSpeed(float speed){
@@ -35,10 +30,14 @@ public class UniversalAnimationRenderer extends AbstractComponent {
 	}
 	@Override
 	public void render(GUIContext container, Graphics g) throws SlickException {
-		if(!visible)
+		if(!visible || sprite == null)
 			return;
+		sprite.draw(x, y, width, height);
 	}
-
+	public void stop(){
+		if(sprite!=null)
+			sprite.stop();
+	}
 	@Override
 	public void setLocation(int x, int y) {
 		this.x = x;
@@ -51,11 +50,12 @@ public class UniversalAnimationRenderer extends AbstractComponent {
 
 	public void setVisible(boolean visible) {
 		this.visible = visible;
-		if(visible)
+		if(visible  && sprite!=null)
 			sprite.restart();
 	}
 	public void restart(){
-		sprite.restart();
+		if(sprite!=null)
+			sprite.restart();
 	}
 	@Override
 	public int getX() {
@@ -66,10 +66,16 @@ public class UniversalAnimationRenderer extends AbstractComponent {
 	public int getY() {
 		return y;
 	}
-
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
 	@Override
 	public int getWidth() {
-		return wigth;
+		return width;
 	}
 
 	@Override

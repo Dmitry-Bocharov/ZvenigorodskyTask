@@ -14,6 +14,7 @@ import ladybugAdventures.enums.GameObject;
 import ladybugAdventures.ui.animation.components.BugladySaidRenderer;
 import ladybugAdventures.ui.animation.components.CommandLogRenderer;
 import ladybugAdventures.ui.animation.components.FireRenderer;
+import ladybugAdventures.ui.animation.components.LadybugRenderer;
 import ladybugAdventures.ui.animation.components.TextInformationRenderer;
 import ladybugAdventures.ui.animation.components.GameFieldRenderer;
 import ladybugAdventures.ui.animation.components.StartButtonRenderer;
@@ -32,6 +33,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -48,7 +50,7 @@ public class MPViewer extends BasicGameState {
 	private CommandLogRenderer logViewer;
 	private BugladySaidRenderer say;
 	private FireRenderer fire;
-	
+	private GUIContext container;
 	private boolean animating;
 	private int oneStep = 0;
 	public MPViewer(GameField field, ManagementProgram program){
@@ -59,12 +61,13 @@ public class MPViewer extends BasicGameState {
 	}
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		
-		background = new Image(ResourceProvider.getResInpStr(ResourceProvider.BACKGROUND_ID),
-				ResourceProvider.BACKGROUND_ID,false);
+		this.container = container;
+		background = new Image(ResourceProvider.getResInpStr(ResourceProvider.BACKGROUND),
+				ResourceProvider.BACKGROUND,false);
 		startButton = new StartButtonRenderer(container);
 		gameField = new GameFieldRenderer(analizator.getFieldBeforeStep());
 		gameField.init(container);
+		
 		
 		fire = new FireRenderer(container, gameField.getCellSize());
 		logViewer = new CommandLogRenderer(container);
@@ -95,9 +98,7 @@ public class MPViewer extends BasicGameState {
 		logViewer.render(container, g);
 		
 		for(MoveRenderElement renderElement: renderTrackList){
-			renderElement.sprite.draw(renderElement.current.x, 
-					renderElement.current.y, 
-					gameField.getCellSize(), gameField.getCellSize());
+			renderElement.element.render(container, g);
 		}
 
 		fire.render(container, g);
@@ -111,7 +112,10 @@ public class MPViewer extends BasicGameState {
 		if(!animating){
 			if(startButton.update(container, t)){
 				animating = true;
-				oneStep = (int) Math.abs(Math.log(gameField.getCellSize()/10));//размер 1 шага
+				oneStep = Math.round(25/gameField.getCellSize());//размер 1 шага
+				if(oneStep == 0){
+					oneStep = 1;
+				}
 				say.setVisible(true);
 			}
 		}
@@ -123,31 +127,39 @@ public class MPViewer extends BasicGameState {
 				}
 				int deltaX = currentElement.result.x-currentElement.current.x;
 				int deltaY = currentElement.result.y-currentElement.current.y;
-				if(i==0)
-					say.setLocation(renderTrackList.get(i).current.x + gameField.getCellSize(), 
-						renderTrackList.get(i).current.y);
+				if(currentElement.element instanceof LadybugRenderer)
+					say.setLocation(currentElement.current.x + gameField.getCellSize()*2/3, 
+							currentElement.current.y);
 				if(!(Math.abs(deltaX)<oneStep && Math.abs(deltaY)<oneStep)){
 					if(deltaX>0){
 						currentElement.current.x+=oneStep;
+						currentElement.element.setLocation(currentElement.current.x, currentElement.element.getY());
 						continue;
 					}
 					if(deltaX<0){
 						currentElement.current.x-=oneStep;
+						currentElement.element.setLocation(currentElement.current.x, currentElement.element.getY());
 						continue;
 					}
 					if(deltaY>0){
 						currentElement.current.y+=oneStep;
+						currentElement.element.setLocation(currentElement.element.getX(), currentElement.current.y);
 						continue;
 					}
 					if(deltaY<0){
 						currentElement.current.y-=oneStep;
+						currentElement.element.setLocation(currentElement.element.getX(), currentElement.current.y);
 						continue;
 					}
 				}
-//				if(i < renderTrackList.size()){
-				if(analizator.getCurrentBehaviour()==Behaviour.PUSHING && analizator.isBlockFellInHole()){//FIXME
-					fire.setLocation(renderTrackList.get(1).result.x, renderTrackList.get(1).result.y);
-					fire.setVisible(true);
+				if(analizator.getCurrentBehaviour()==Behaviour.PUSHING){
+					if(currentElement.element instanceof LadybugRenderer){
+						((LadybugRenderer)currentElement.element).setBehaviour(Behaviour.PUSHING);
+					}
+					if(analizator.isBlockFellInHole()){
+						fire.setLocation(renderTrackList.get(1).result.x, renderTrackList.get(1).result.y);
+						fire.setVisible(true);
+					}
 				}
 				if(!updateRenderTrackList())
 					animating = false;
@@ -167,8 +179,9 @@ public class MPViewer extends BasicGameState {
 			logViewer.addToLog(analizator.getLastPerformedCommand());
 			List<StepTrack> tracks = analizator.getTrackList();
 			gameField.setNotRenderList(tracks);
+			
 			for(int i = 0;i<tracks.size();i++){
-				renderTrackList.add(new MoveRenderElement(tracks.get(i),gameField));
+				renderTrackList.add(new MoveRenderElement(tracks.get(i),gameField, container, analizator));
 			}
 			
 			gameField.setGameField(analizator.getFieldBeforeStep());
@@ -177,7 +190,6 @@ public class MPViewer extends BasicGameState {
 		}
 		startButton.setVisible(false);
 		say.setText(analizator.getCurrentErrorDefinition());
-//		fire.restart();
 		gameField.setNotRenderList(new ArrayList<StepTrack>());
 		gameField.setGameField(analizator.getFieldAfterStep());
 		return false;

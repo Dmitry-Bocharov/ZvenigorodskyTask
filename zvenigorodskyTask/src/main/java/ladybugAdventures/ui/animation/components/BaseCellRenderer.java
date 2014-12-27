@@ -21,8 +21,8 @@ public class BaseCellRenderer extends AbstractComponent {
 	private Image image;
 	public BaseCellRenderer(GUIContext container, int cellSize) throws SlickException {
 		super(container);
-		image = new Image(ResourceProvider.getResInpStr(ResourceProvider.EMPTY_CELL_ID),
-				ResourceProvider.EMPTY_CELL_ID,false);
+		image = new Image(ResourceProvider.getResInpStr(ResourceProvider.EMPTY_CELL),
+				ResourceProvider.EMPTY_CELL,false);
 		this.width = cellSize;
 		this.height = cellSize;
 	}

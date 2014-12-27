@@ -39,7 +39,7 @@ public class SplashScreen extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 //		LoadingList.setDeferredLoading( false );
-		splash.draw(container.getWidth()/2-splash.getWidth()/2, container.getHeight()/2-splash.getHeight()/2);
+		splash.draw(0,0,1900, 1060);
 		LoadingList.setDeferredLoading( false );
 	}
 

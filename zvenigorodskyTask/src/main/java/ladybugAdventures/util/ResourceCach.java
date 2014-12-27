@@ -67,28 +67,28 @@ public class ResourceCach {
 		switch (object) {
 			case LADYBUG:
 				if (ladybugImage == null) {
-					imgData = new Image(device, ResourceProvider.getResInpStr(ResourceProvider.LADYBUG_ID)).getImageData();
+					imgData = new Image(device, ResourceProvider.getResInpStr(ResourceProvider.LADYBUG)).getImageData();
 					ladybugImage = new Image(device, imgData.scaledTo(width, height));
 				}	
 				img = ladybugImage;
 				break;
 			case BLOCK:
 				if (blockImage == null){
-					imgData = new Image(device, ResourceProvider.getResInpStr(ResourceProvider.BLOCK_ID)).getImageData();
+					imgData = new Image(device, ResourceProvider.getResInpStr(ResourceProvider.BLOCK)).getImageData();
 					blockImage = new Image(device, imgData.scaledTo(width, height));
 				}
 				img = blockImage;
 				break;
 			case HOLE:
 				if (holeImage == null) {
-					imgData = new Image(device, ResourceProvider.getResInpStr(ResourceProvider.HOLE_ID)).getImageData();
+					imgData = new Image(device, ResourceProvider.getResInpStr(ResourceProvider.HOLE)).getImageData();
 					holeImage = new Image(device, imgData.scaledTo(width, height));
 				}
 				img = holeImage;
 				break;
 			case OCCUPIED_CELL:
 				if (occupiedCellImage == null) {
-					imgData = new Image(device, ResourceProvider.getResInpStr(ResourceProvider.OCCUPIED_CELL_ID)).getImageData();
+					imgData = new Image(device, ResourceProvider.getResInpStr(ResourceProvider.OCCUPIED_CELL)).getImageData();
 					occupiedCellImage = new Image(device, imgData.scaledTo(width, height));
 				}
 				img = occupiedCellImage;
