@@ -65,7 +65,7 @@ public class AnimationRunner extends StateBasedGame{
 					AppGameContainer container = new AppGameContainer(new AnimationRunner(GAME_NAME, program, field));
 //					org.eclipse.swt.graphics.Rectangle bounds = Display.getDefault().getBounds();
 //					container.setDisplayMode(bounds.width, bounds.height, false);
-					container.setDisplayMode(1900, 1060, false);
+					container.setDisplayMode(1300, 760, false);
 					container.setShowFPS(false);
 					container.setTitle(GAME_NAME);
 					container.setForceExit(false);
